@@ -1,5 +1,5 @@
 const initialData =  [
-    {
+    {   "id": 1,
         "projectName": "ESSSV",
         "projectDesc": "esssv hybid electric HT- 1009005",
         "lifeCycle": "Full",
@@ -13,9 +13,11 @@ const initialData =  [
                 { id: 'task-4', content: 'Learn Next' }
         ],
         "goals": "Something",
-        "escalation": "Management"
+        "escalation": "Management", 
+        "editing": "false"
     },
     {
+        "id": 2,
         "projectName": "OPSIS",
         "projectDesc": "Opsis scorpion HT- 1009093",
         "lifeCycle": "Moderate",
@@ -29,9 +31,11 @@ const initialData =  [
                 { id: 'task-4', content: 'Learn Next' }
         ],
         "goals": "All docs come by 28/2/2019",
-        "escalation": "QD MPA"
+        "escalation": "QD MPA",
+        "editing": "false"
     },
     {
+        "id": 3,
         "projectName": "OPSIS AWES",
         "projectDesc": "Opsis awes HT-10035555",
         "lifeCycle": "Core",
@@ -45,7 +49,8 @@ const initialData =  [
                 { id: 'task-4', content: 'Learn Next' }
         ],
         "goals": "Something",
-        "escalation": ""
+        "escalation": "",
+        "editing": "false"
     }
 ];   
 

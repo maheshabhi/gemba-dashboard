@@ -10,7 +10,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import styled from 'styled-components';
-
+import Icon from '@material-ui/core/Icon';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import EditProject from './editProject';
+import ModalComponent from './modal.component';
 
 const StyledTableCell = styled.th`
     background-color: #fff;
@@ -38,6 +42,40 @@ const StyledTableRow = withStyles(theme => ({
 
 
 class AllProjects extends Component {
+
+    constructor(props, context) {
+        super(props, context)
+
+        this.handleClose = this.handleClose.bind(this);
+        this.handleShow = this.handleShow.bind(this);
+
+        this.state = {
+            show: false
+        };
+    }
+
+    handleClose() {
+        this.setState({ show: !this.state.show });
+    }
+    
+    handleShow  = (project) => {
+        this.setState({ show: true });
+        // console.log("props id", id);
+        console.log("projecrt", project);
+        this.props.dispatch({ type: 'EDIT_PROJECT', id: project.id })
+    }   
+    
+    handleEdit = (project) => {
+        debugger;
+        console.log("project", project);
+        this.state = {
+            show: true
+        };
+        console.log("project", project);
+        return <ModalComponent project={project} show={this.state.show} />
+    }
+
+
     render() {
         return (
             <div className="container-fluid pl-5 pr-5">
@@ -55,6 +93,7 @@ class AllProjects extends Component {
                                     <StyledTableCell> Stage </StyledTableCell>
                                     <StyledTableCell>Goals </StyledTableCell>
                                     <StyledTableCell> Escalation </StyledTableCell>
+                                    <StyledTableCell> Actions </StyledTableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -66,15 +105,21 @@ class AllProjects extends Component {
                                     <StyledTableCell> {project.startDate} </StyledTableCell>
                                     <StyledTableCell> {project.endDate} </StyledTableCell>
                                     <StyledTableCell> {project.stage} </StyledTableCell>
-                                    {/* <StyledTableCell> <DragDropComponent activities={project.activities} /> </StyledTableCell> */}
                                     <StyledTableCell> {project.goals} </StyledTableCell>
                                     <StyledTableCell> {project.escalation} </StyledTableCell>
+                                    <StyledTableCell> 
+                                        <EditIcon onClick={() => this.handleEdit(project)} />
+                                        {this.state.show ? <ModalComponent project={project} show={this.state.show} /> : null}
+                                        <DeleteIcon onClick={() => this.props.dispatch({ type: 'DELETE_POST', id: project.id })} />
+                                    </StyledTableCell>
                                 </StyledTableRow>
                                 )}
                             </TableBody>
                         </Table>
                         </Paper>
-                
+
+                    
+                        
                 
             </div>
         );

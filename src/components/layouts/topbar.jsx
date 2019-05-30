@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import validate from '../validate';
 import { connect } from 'react-redux';
 import AddProject from './addProject';
-
+import Button from '@material-ui/core/Button';
 
 class Topbar extends React.Component {
 
@@ -93,9 +93,9 @@ class Topbar extends React.Component {
             <div className="container-fluid p-5">
                 <br/>
                 <div className="clearfix">
-                    <button type="button" className="btn btn-primary float-right" data-toggle="modal" data-target="#myModal">
+                    <Button variant="contained" color="primary" className="float-right" data-toggle="modal" data-target="#myModal">
                         Add Project
-                    </button>
+                    </Button>
                 </div>
                 
                 <div className="modal" id="myModal">
