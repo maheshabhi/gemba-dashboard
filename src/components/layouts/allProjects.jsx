@@ -50,8 +50,10 @@ class AllProjects extends Component {
         this.handleShow = this.handleShow.bind(this);
 
         this.state = {
-            show: false
+            show: false, 
+            project: {}
         };
+        this._onButtonClick = this._onButtonClick.bind(this);
     }
 
     handleClose() {
@@ -75,6 +77,12 @@ class AllProjects extends Component {
         return <ModalComponent project={project} show={this.state.show} />
     }
 
+    _onButtonClick = (project) => {
+        this.setState({
+            show: true,
+            project: project
+        });
+      }
 
     render() {
         return (
@@ -108,8 +116,11 @@ class AllProjects extends Component {
                                     <StyledTableCell> {project.goals} </StyledTableCell>
                                     <StyledTableCell> {project.escalation} </StyledTableCell>
                                     <StyledTableCell> 
-                                        <EditIcon onClick={() => this.handleEdit(project)} />
-                                        {this.state.show ? <ModalComponent project={project} show={this.state.show} /> : null}
+                                        <EditIcon onClick={() =>this._onButtonClick(project)} />
+                                        {this.state.show ?
+                                            <ModalComponent show={this.state.show} project={this.state.project} id={project.id} onHideModal={this.handleClose} /> :
+                                            null
+                                        }
                                         <DeleteIcon onClick={() => this.props.dispatch({ type: 'DELETE_POST', id: project.id })} />
                                     </StyledTableCell>
                                 </StyledTableRow>

@@ -11,18 +11,23 @@ const addProject = (state = initialData, action) => {
             return state.filter((project) => project.id !== action.id);
 
         case 'EDIT_PROJECT':
-            let trtt = state.map((project) => {
-                
-                debugger;
+            return state.map((project) => {
                 if(project.id == action.id) {
                     return {...project, editing: true}
                 } else {
                     return project
                 }
             });
-            console.log("edit", trtt);
-            
-            return trtt;
+        
+        case 'UPDATE': 
+            return state.map(project => {
+                if(project.id == action.id) {
+                    return {
+                        ...project,
+                        projectName: action.data.newTitle
+                    }
+                } else return project;
+            })
 
         default:
             return state;
