@@ -1,23 +1,25 @@
-import React from 'react';
-import validate from '../validate';
+import React, { Component } from 'react';
+
 import { connect } from 'react-redux';
-import TextArea from '../../containers/textarea';
+import Modal from 'react-bootstrap/Modal';
+
 import TextInput from '../../containers/textInput';
+import TextArea from '../../containers/textarea';
 import DateInput from '../../containers/dateInput';
 import SelectInput from '../../containers/selectInput';
 
-class AddProject extends React.Component {
+
+class EditProjectModalComponent extends React.Component {
 
     constructor(props) {
         super(props)
-
-        this.handleSubmit = this.handleSubmit.bind(this);
-
+        console.log("props", this.props);
+        
         this.state = {
             isFormvalid: false,
             formControls: {
                 name: {
-                    value: '', 
+                    value: this.props.project.projectName, 
                     placeholder: 'Please enter project name',
                     label: 'Project Name',
                     valid: false,
@@ -28,7 +30,7 @@ class AddProject extends React.Component {
                     touched: false
                 }, 
                 desc: {
-                    value: '', 
+                    value: this.props.project.projectDesc, 
                     placeholder: 'Please enter project desc',
                     label: 'Project Description',
                     valid: false,
@@ -38,7 +40,7 @@ class AddProject extends React.Component {
                     touched: false
                 }, 
                 lifeCycle: {
-                    value: '', 
+                    value: this.props.project.lifeCycle, 
                     placeholder: 'Please select lifeCycle type',
                     label: "Life Cycle Type",
                     valid: false,
@@ -53,7 +55,7 @@ class AddProject extends React.Component {
                     ]
                 }, 
                 startDate: {
-                    value: '', 
+                    value: this.props.project.startDate, 
                     placeholder: 'Please choose a start date',
                     label: 'Start Date',
                     valid: false,
@@ -63,7 +65,7 @@ class AddProject extends React.Component {
                     }
                 }, 
                 endDate: {
-                    value: '', 
+                    value: this.props.project.endDate, 
                     placeholder: 'Please choose a end date',
                     label: 'End Date',
                     valid: false,
@@ -73,7 +75,7 @@ class AddProject extends React.Component {
                     }
                 }, 
                 stage: {
-                    value: '', 
+                    value: this.props.project.stage, 
                     placeholder: 'Please select the stage',
                     label: 'Project stage',
                     valid: false,
@@ -88,7 +90,7 @@ class AddProject extends React.Component {
                     ]
                 }, 
                 goals: {
-                    value: '', 
+                    value: this.props.project.goals, 
                     placeholder: 'Please enter project goals',
                     label: 'Project Goals',
                     valid: false,
@@ -99,7 +101,7 @@ class AddProject extends React.Component {
                     }
                 }, 
                 escalation: {
-                    value: '', 
+                    value: this.props.project.escalation, 
                     placeholder: 'Please enter project escalation',
                     label: 'Project Escalation',
                     valid: false,
@@ -110,7 +112,7 @@ class AddProject extends React.Component {
                     }
                 },
                 activityCategory: {
-                    value: '', 
+                    value: this.props.project.activityCategory, 
                     placeholder: 'Please select activity category',
                     label: 'Category',
                     valid: false,
@@ -125,7 +127,7 @@ class AddProject extends React.Component {
                     ]
                 }, 
                 activities: {
-                    value: '', 
+                    value: this.props.project.activities, 
                     placeholder: 'Please enter activities deatails',
                     label: 'Activities Details',
                     valid: false,
@@ -139,34 +141,6 @@ class AddProject extends React.Component {
             }        
         }
     }
-
-    handleSubmit = (event) =>  {
-        event.preventDefault();
-        console.log("this.props", this.props);
-        
-        console.log("form data", this.state.formControls);
-
-        const data = {
-            id: new Date(),
-            projectName: this.state.formControls.name.value,
-            projectDesc: this.state.formControls.desc.value, 
-            lifeCycle: this.state.formControls.lifeCycle.value, 
-            startDate: this.state.formControls.startDate.value, 
-            endDate: this.state.formControls.endDate.value, 
-            stage : this.state.formControls.stage.value,
-            goals: this.state.formControls.goals.value, 
-            escalation:  this.state.formControls.escalation.value, 
-            activityCategory:  this.state.formControls.desc.value, 
-            activities: this.state.formControls.activities.value
-
-        }
-
-        this.props.dispatch({
-            type: 'ADD_PROJECT',
-            data
-        });
-        
-      }
 
     changehandler = (event) => {
 
@@ -183,7 +157,7 @@ class AddProject extends React.Component {
 
         updatedFormElement.value = value;
         updatedFormElement.touched = true;
-        updatedFormElement.valid = validate(value, updatedFormElement.validationRules);
+        // updatedFormElement.valid = validate(value, updatedFormElement.validationRules);
 
         updatedControls[name]= updatedFormElement;
 
@@ -198,15 +172,45 @@ class AddProject extends React.Component {
             isFormvalid: isFormvalid
         });
     }
+    handleClose= () => {
+        console.log("closing the modal");
+
+    }
+
+    handleEdit = (e) => {
+        e.preventDefault();
+        const data = {
+            projectName: this.state.formControls.name.value,
+            projectDesc: this.state.formControls.desc.value,
+            lifeCycle  : this.state.formControls.lifeCycle.value,
+            startDate  : this.state.formControls.startDate.value,
+            endDate    : this.state.formControls.endDate.value,
+            stage      : this.state.formControls.stage.value,
+            activities : this.state.formControls.activities.value, 
+            goals      : this.state.formControls.goals.value,
+            escalation : this.state.formControls.escalation.value, 
+            activityCategory: this.state.formControls.activityCategory.value
+        }
+        debugger;
+        this.props.dispatch({ type: 'UPDATE', id: this.props.project.id, data: data })
+
+        this.props.onHideModal();
+    }
 
     render() {
 
-        return(
+        return (
+
             <div>
-                <div className="mt-4">
+                <Modal show={this.props.show} onHide={this.props.onHideModal}  animation={false} size="lg">
+                    <Modal.Header closeButton>
+                        <Modal.Title> Edit project details</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+
                     <div>
-                        <form  onSubmit={this.handleSubmit}>
-                            <div className="row">
+                        <form  onSubmit={this.handleEdit}>
+                        <div className="row">
                                 <div className="col-md-6">
                                     <TextInput name="name" value={this.state.formControls.name.value} 
                                         placeholder={this.state.formControls.name.placeholder} onChange={this.changehandler} label={this.state.formControls.name.label}
@@ -290,6 +294,7 @@ class AddProject extends React.Component {
                                 </div>
                             </div>
                             <br/><br/><br/>
+                            <br/>
                             <div className="row">
                                 <div className="col-md-12 ">
                                     <input  type="submit" value="Submit" className="btn btn-primary float-right" /> 
@@ -297,10 +302,14 @@ class AddProject extends React.Component {
                             </div><br/>
                         </form>
                     </div>
-                </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                    </Modal.Footer>
+                </Modal>
             </div>
+             
         )
     }
 }
 
-export default connect()(AddProject)
+export default connect() (EditProjectModalComponent);

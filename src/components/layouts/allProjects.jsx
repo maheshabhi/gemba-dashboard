@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
-// import Project from './project';
-import { withStyles, Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,35 +9,12 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import styled from 'styled-components';
-import Icon from '@material-ui/core/Icon';
+import EditProjectModalComponent from './editProjectModal.component';
+import Activities from './activites';
+
+// Material UI
 import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import EditProject from './editProject';
-import ModalComponent from './modal.component';
-
-const StyledTableCell = styled.th`
-    background-color: #fff;
-    color: #111
-    padding: 10px;
-`
-// const StyledTableCell = withStyles(theme => ({
-//     head: {
-//       backgroundColor: theme.palette.common.black,
-//       color: theme.palette.common.white,
-//     },
-//     body: {
-//       fontSize: 14,
-//     },
-//   }))(TableCell);
-
-
-const StyledTableRow = withStyles(theme => ({
-    root: {
-      '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.background.default,
-      },
-    },
-  }))(TableRow);
+import EditIcon from '@material-ui/icons/Edit'; 
 
 
 class AllProjects extends Component {
@@ -62,19 +38,14 @@ class AllProjects extends Component {
     
     handleShow  = (project) => {
         this.setState({ show: true });
-        // console.log("props id", id);
-        console.log("projecrt", project);
         this.props.dispatch({ type: 'EDIT_PROJECT', id: project.id })
     }   
     
     handleEdit = (project) => {
-        debugger;
-        console.log("project", project);
         this.state = {
             show: true
         };
-        console.log("project", project);
-        return <ModalComponent project={project} show={this.state.show} />
+        return <EditProjectModalComponent project={project} show={this.state.show} />
     }
 
     _onButtonClick = (project) => {
@@ -82,59 +53,84 @@ class AllProjects extends Component {
             show: true,
             project: project
         });
-      }
+    }
 
     render() {
         return (
             <div className="container-fluid pl-5 pr-5">
                 <h3> Projects</h3>
                     <Paper>
-                        <Table >
-                            <TableHead>
-                                <TableRow>
-                                    <StyledTableCell> Project Name </StyledTableCell>
-                                    <StyledTableCell> Project Description </StyledTableCell>
-                                    <StyledTableCell> Lifecycle Type </StyledTableCell>
-                                    <StyledTableCell> Start Date </StyledTableCell>
-                                    <StyledTableCell> End Date </StyledTableCell>
-                                    {/* <StyledTableCell> Activities </StyledTableCell> */}
-                                    <StyledTableCell> Stage </StyledTableCell>
-                                    <StyledTableCell>Goals </StyledTableCell>
-                                    <StyledTableCell> Escalation </StyledTableCell>
-                                    <StyledTableCell> Actions </StyledTableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {this.props.projects.map(project =>
-                                <StyledTableRow key={project.id}>
-                                    <StyledTableCell component="th" scope="row"> {project.projectName} </StyledTableCell>
-                                    <StyledTableCell> {project.projectDesc} </StyledTableCell>
-                                    <StyledTableCell> {project.lifeCycle} </StyledTableCell>
-                                    <StyledTableCell> {project.startDate} </StyledTableCell>
-                                    <StyledTableCell> {project.endDate} </StyledTableCell>
-                                    <StyledTableCell> {project.stage} </StyledTableCell>
-                                    <StyledTableCell> {project.goals} </StyledTableCell>
-                                    <StyledTableCell> {project.escalation} </StyledTableCell>
-                                    <StyledTableCell> 
-                                        <EditIcon onClick={() =>this._onButtonClick(project)} />
-                                        {this.state.show ?
-                                            <ModalComponent show={this.state.show} project={this.state.project} id={project.id} onHideModal={this.handleClose} /> :
-                                            null
-                                        }
-                                        <DeleteIcon onClick={() => this.props.dispatch({ type: 'DELETE_POST', id: project.id })} />
-                                    </StyledTableCell>
-                                </StyledTableRow>
+                        <table className="table table-bordered table-responsive">
+                            <thead className="thead-blue">
+                                <tr>
+                                    <th> Project Name </th>
+                                    <th> Project Description </th>
+                                    <th> Lifecycle Type </th>
+                                    <th> Start Date </th>
+                                    <th> End Date </th>
+                                    <th> Stage </th>
+                                    <th>Goals </th>
+                                    <th> Escalation </th>
+                                    <th colSpan="3"> Activities </th>
+                                    <th> Actions </th>
+                                </tr>
+                                <tr>
+                                    <th>  </th>
+                                    <th> </th>
+                                    <th> </th>
+                                    <th>  </th>
+                                    <th>  </th>
+                                    <th>  </th>
+                                    <th>  </th>
+                                    <th>  </th>
+                                    <th> Carry over </th>
+                                    <th> This week </th>
+                                    <th> Next week </th>
+                                    <th> </th>
+                                </tr>
+                            </thead>
+                            {this.props.projects.map(project =>
+                                <tbody key={project.id}>
+                                    <tr>
+                                        <td> {project.projectName} </td>
+                                        <td> {project.projectDesc} </td>
+                                        <td> {project.lifeCycle} </td>
+                                        <td> {project.startDate} </td>
+                                        <td> {project.endDate} </td>
+                                        <td> {project.stage} </td>
+                                        <td> {project.goals} </td>
+                                        <td> {project.escalation} </td>
+                                        <td> 
+                                            {project.activities.map(activity => ( 
+                                                activity.category == 'Carry over' ? <Activities activities={activity} activityCategory={project.activityCategory} key={activity.id} />: null
+                                            ))}
+                                        </td>
+                                        <td> 
+                                            {project.activities.map(activity => ( 
+                                                activity.category == 'This week' ? <Activities activities={activity} activityCategory={project.activityCategory} key={activity.id} />: null
+                                            ))}
+                                        </td>
+                                        <td> 
+                                            {project.activities.map(activity => ( 
+                                                activity.category == 'Next week' ? <Activities activities={activity} activityCategory={project.activityCategory} key={activity.id} />: null
+                                            ))}
+                                        </td>
+                                        <td> 
+                                            <EditIcon onClick={() =>this._onButtonClick(project)} />
+                                            {this.state.show ?
+                                                <EditProjectModalComponent show={this.state.show} project={this.state.project} id={project.id} onHideModal={this.handleClose} /> :
+                                                null
+                                            }
+                                            <DeleteIcon onClick={() => this.props.dispatch({ type: 'DELETE_POST', id: project.id })} />
+                                        </td>
+                                    </tr>
+                                </tbody>
                                 )}
-                            </TableBody>
-                        </Table>
-                        </Paper>
-
-                    
-                        
-                
+                        </table>
+                    </Paper>
             </div>
         );
-    }
+    } 
 }
 
 const mapStateToProps = (state) => {

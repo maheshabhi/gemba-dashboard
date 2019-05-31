@@ -24,7 +24,15 @@ const addProject = (state = initialData, action) => {
                 if(project.id == action.id) {
                     return {
                         ...project,
-                        projectName: action.data.newTitle
+                        projectName: action.data.projectName,
+                        projectDesc: action.data.projectDesc,
+                        lifeCycle: action.data.lifeCycle,
+                        startDate: action.data.startDate,
+                        endDate: action.data.endDate,
+                        stage: action.data.stage,
+                        escalation: action.data.escalation,
+                        activities: action.data.activities,
+                        activityCategory: action.data.activityCategory,
                     }
                 } else return project;
             })

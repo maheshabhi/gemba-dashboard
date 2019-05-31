@@ -1,126 +1,45 @@
 import React, { Component } from 'react';
-import validate from '../validate';
 import { connect } from 'react-redux';
-import AddProject from './addProject';
 import Button from '@material-ui/core/Button';
+import AddProjectModalComponent from './addProjectModal.component'
 
 class Topbar extends React.Component {
-
 
     constructor(props) {
         super(props)
 
-        this.handleSubmit = this.handleSubmit.bind(this);
-
         this.state = {
-            isFormvalid: false,
-            formControls: {
-                name: {
-                    value: '', 
-                    placeholder: 'Please enter project name',
-                    label: 'Project Name',
-                    valid: false,
-                    validationRules: {
-                        minLength: 3, 
-                        isRequired: true
-                    },
-                    touched: false
-                }, 
-                desc: {
-                    value: '', 
-                    placeholder: 'Please enter project desc',
-                    label: 'Project Description',
-                    valid: false,
-                    validationRules: {
-                        minLength: 3
-                    },
-                    touched: false
-                }
-                
-            }        
+            show: false      
         }
     }
-    changehandler = (event) => {
 
-        const name = event.target.name;
-        const value = event.target.value; 
-
-        const updatedControls = {
-            ...this.state.formControls
-        }
-
-        const updatedFormElement = {
-            ...updatedControls[name]
-        }
-
-        updatedFormElement.value = value;
-        updatedFormElement.touched = true;
-        updatedFormElement.valid = validate(value, updatedFormElement.validationRules);
-
-        updatedControls[name]= updatedFormElement;
-
-        let isFormvalid = true;
-
-        for (let inputIndefier in updatedControls) {
-            isFormvalid = updatedControls[inputIndefier].valid && isFormvalid
-        }
-
+    _onButtonClick = () => {
         this.setState({
-            formControls: updatedControls,
-            isFormvalid: isFormvalid
+            show: true,
         });
     }
 
-    handleSubmit = (event) =>  {
-        event.preventDefault();
-        // debugger;
-        const projectName = this.state.formControls.name.value;
-        const projectDesc = this.state.formControls.desc.value;
-        const data = {
-            id: new Date(),
-            projectName, 
-            projectDesc
-        }
+    handleClose = () => {
+        this.setState({ show: !this.state.show });
+    }
 
-        this.props.dispatch({
-            type: 'ADD_PROJECT',
-            data
-        });
-      }
-    
-    render() {
+    render() { 
         return (
-            <div className="container-fluid p-5">
+            <div className="container-fluid p-4">
                 <br/>
+
                 <div className="clearfix">
-                    <Button variant="contained" color="primary" className="float-right" data-toggle="modal" data-target="#myModal">
+                    <Button variant="contained" color="primary" className="float-right" onClick={this._onButtonClick}>
                         Add Project
                     </Button>
-                </div>
-                
-                <div className="modal" id="myModal">
-                    <div className="modal-dialog modal-lg">
-                        <div className="modal-content">
-                        
-                        <div className="modal-header">
-                            <h4 className="modal-title">Create Project</h4>
-                            <button type="button" className="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        
-                        <div className="modal-body">
-                            <AddProject />
-                        </div>
-                        
-                        <div className="modal-footer">
-                        </div>
-                        
-                        </div>
-                    </div>
+                    {this.state.show ?
+                        <AddProjectModalComponent show={this.state.show}  onHideModal={this.handleClose} /> :
+                        null
+                    } 
                 </div>
             </div>
-        )
+        );
     }
-    
 }
 
 export default connect()(Topbar);

@@ -1,8 +1,8 @@
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-        "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-        sans-serif;
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
@@ -10,14 +10,14 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 /* custom CSS */
 
 .navbar {
-  background-color: #111;
-  color: #fff;
+    background-color: #111;
+    color: #fff;
 }
 
 .card {
@@ -25,16 +25,17 @@ code {
     border-radius: 5px;
     display: inline-block !important;
     transition: 0.3s;
-    margin: 5px 2px;
-  }
+    margin: 5px 2px;    
+    padding: 8px;
+}
 
 .card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
 .table th {
-  text-align: center !important;
-  vertical-align: middle !important;    
+    text-align: center !important;
+    vertical-align: middle !important;    
 } 
 
 .thead-blue {
@@ -58,31 +59,34 @@ footer p{
 }
 
 .btn-add {
-  float: right;
-  text-align: right;
-  background-color: #746fbd !important;
-  border-color: #746fbd !important;
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  margin: 10px;
-  cursor: pointer;
-  border-radius: unset !important;
+    float: right;
+    text-align: right;
+    background-color: #746fbd !important;
+    border-color: #746fbd !important;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: unset !important;
 }
 
-
 a{
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .form-control {
-  width: 50%;
-  border: 1px solid #ccc;
-  padding: 10px; 
+    width: 50%;
+    border: 1px solid #ccc;
+    padding: 10px; 
 }
 
 .control-error {
-  border: 1px solid red !important;
+    border: 1px solid red !important;
+}
+
+.display-inlineBlock {
+    display: inline-block;
 }
